@@ -1,11 +1,11 @@
 import express from "express";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { UserRoutes } from "./modules/users/routes/user.routes";
 
 export const app = express();
 
 app.use(express.json());
+
+app.use("/users", UserRoutes());
 
 export async function startWebServer() {
   return new Promise((resolve) => {
