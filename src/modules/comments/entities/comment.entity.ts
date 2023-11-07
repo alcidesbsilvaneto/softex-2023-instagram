@@ -3,34 +3,27 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
+import { User } from "../../users/entities/user.entity";
 
-@Entity("users")
-export class User {
+@Entity("comments")
+export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
-
-  @Column({ unique: true })
-  email: string;
+  text: string;
 
   @Column()
-  bio: string;
-
-  @Column({ default: 0 })
-  followers_count: number;
-
-  @Column({ default: 0 })
-  following_count: number;
+  post_id: number;
 
   @Column()
-  password_hash: string;
+  user_id: number;
 
   @CreateDateColumn()
   created_at: Date;
@@ -42,6 +35,11 @@ export class User {
   deleted_at: Date;
 
   // Relations
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  @ManyToOne(() => Post, (post) => post.comments)
+  @JoinColumn({ name: "post_id" })
+  post: Post;
+
+  @ManyToOne(() => User, (user) => user.comments)
+  @JoinColumn({ name: "user_id" })
+  user: User;
 }
